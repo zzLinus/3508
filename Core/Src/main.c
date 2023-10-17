@@ -29,6 +29,7 @@
 #include "pid.h"
 #include <stdio.h>
 #include <string.h>
+#include "stm32f407xx.h"
 
 /* USER CODE END Includes */
 
@@ -104,7 +105,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	set_spd = 2500;  // set speed (rpm)
+	set_spd = 9000;  // set speed (rpm)
   for(int i=0; i<4; i++)
   {	
     pid_init(&motor_pid[i]);
@@ -117,22 +118,30 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		
-		/* 山外调试助手虚拟示波器 Virtual oscilloscope */
-		HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[0], 1, 0x0a);
-		HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[1], 1, 0x0a);
-		HAL_UART_Transmit(&huart1, (uint8_t *)&moto_chassis[0].speed_rpm, sizeof(int16_t), 0x0a);
-		HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[2], 1, 0x0a);
-		HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[3], 1, 0x0a);
+		/* 山??????????????示???? Virtual oscilloscope */
+		/**HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[0], 1, 0x0a);*/
+		/**HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[1], 1, 0x0a);*/
+		/**HAL_UART_Transmit(&huart1, (uint8_t *)&moto_chassis[0].speed_rpm, sizeof(int16_t), 0x0a);*/
+		/**HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[2], 1, 0x0a);*/
+		/**HAL_UART_Transmit(&huart1, (uint8_t *)&SendBuffer[3], 1, 0x0a);*/
 		/**************************************************************/
+
+			/**cprintf(&huart1, "%d",(uint8_t *)&SendBuffer[0], 1, 0x0a);*/
+			/**cprintf(&huart1, "%d",(uint8_t *)&SendBuffer[1], 1, 0x0a);*/
+			/**cprintf(&huart1, "%d",(uint8_t *)&moto_chassis[0].speed_rpm, sizeof(int16_t));*/
+			/**cprintf(&huart1, "%d",);*/
+			/**cprintf(&huart1, "%d",);*/
+			/**cprintf(&huart1, "%d",);*/
+			/**cprintf(&huart1, "%d",);*/
 		
 		/* PID calculation & motor output */
 		for(int i=0; i<4; i++)
     {	
       motor_pid[i].target = set_spd; 																							
-      motor_pid[i].f_cal_pid(&motor_pid[i],moto_chassis[i].speed_rpm);    //根据设定值进行PID计算。
+      motor_pid[i].f_cal_pid(&motor_pid[i],moto_chassis[i].speed_rpm);    //?????瓒ㄖ?????PID???恪?
     }
-    set_moto_current(&hcan1, motor_pid[0].output,   //将PID的计算结果通过CAN发送到电机
-                        motor_pid[1].output,
+    set_moto_current(&hcan1, motor_pid[0].output,   //??PID?募???????通??CAN???偷?????
+                        -motor_pid[1].output,
                         motor_pid[2].output,
                         motor_pid[3].output);
 		/**************************************************************/
